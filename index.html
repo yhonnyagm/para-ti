@@ -208,6 +208,28 @@
       position: relative; /* Clave: empieza al lado, no montado */
       min-width: 90px;
     }
+    .error-toast {
+      margin-top: 1.2rem;
+      padding: 0.75rem 1.2rem;
+      border-radius: 12px;
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      color: #fca5a5;
+      font-size: 0.9rem;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      line-height: 1.4;
+      animation: shake 0.4s ease;
+    }
+
+    /* Animación de vibración suave tipo error del sistema */
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
 
     /* Mensaje de aceptación */
     #celebration {
@@ -339,11 +361,12 @@
     </div>
 
     <div id="proposal-box">
-      <div class="question">¿Quieres ser formalmente mi novia? ✨</div>
+      <div class="question">¿Quieres ser mi novia? ✨</div>
       <div class="actions">
         <button class="btn btn-yes" onclick="celebrate()">¡Sí, claro que sí! 💛</button>
-        <button class="btn btn-no" id="btnNo">No</button>
+        <button class="btn btn-no" id="btnNo" onclick="handleNoClick()">No</button>
       </div>
+      <div id="errorMessage" class="error-toast"></div>
     </div>
 
     <div id="celebration">
@@ -373,33 +396,38 @@
     }
     setInterval(createPetal, 300);
 
-    // 2. Botón "No" que escapa al intentar tocarlo
-    const btnNo = document.getElementById('btnNo');
+    // 2. Mensajes de error al presionar el botón "No"
+    const errorMessages = [
+      "⚠️ Error 404: Respuesta no permitida por el sistema.",
+      "⚠️ Acción inválida: Esta opción no está disponible para ti.",
+      "⚠️ Advertencia: El botón correcto es el amarillo.",
+      "⚠️ Error de conexión: Intenta marcar '¡Sí, claro que sí!'.",
+      "⚠️ ¿Segura? Mira qué lindo brilla el botón amarillo..."
+    ];
 
-    function dodge(e) {
-      if (e) e.preventDefault();
+    let errorIndex = 0;
+    let yesScale = 1;
 
-      // Al primer intento de clic o toque, se desacopla para moverse libremente
-      btnNo.style.position = 'fixed';
-      btnNo.style.zIndex = '999';
+    function handleNoClick() {
+      const errorDiv = document.getElementById('errorMessage');
+      const btnYes = document.getElementById('btnYes');
 
-      const padding = 20;
-      const maxX = window.innerWidth - btnNo.offsetWidth - padding;
-      const maxY = window.innerHeight - btnNo.offsetHeight - padding;
+      // Muestra el mensaje de error con animación
+      errorDiv.innerHTML = errorMessages[errorIndex];
+      errorDiv.style.display = 'flex';
+      errorDiv.style.animation = 'none';
+      errorDiv.offsetHeight; // Forzar reinicio de animación
+      errorDiv.style.animation = 'shake 0.4s ease';
 
-      const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
-      const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
+      // Avanzar al siguiente mensaje
+      errorIndex = (errorIndex + 1) % errorMessages.length;
 
-      btnNo.style.left = `${randomX}px`;
-      btnNo.style.top = `${randomY}px`;
+      // Hace que el botón de Sí crezca un poco cada vez
+      yesScale += 0.08;
+      btnYes.style.transform = `scale(${yesScale})`;
     }
 
-    // Funciona tanto en computadora (al pasar el mouse) como en teléfono (al intentar tocarlo)
-    btnNo.addEventListener('mouseenter', dodge);
-    btnNo.addEventListener('touchstart', dodge, { passive: false });
-    btnNo.addEventListener('click', dodge);
-
-    // 3. Aceptación de la propuesta (cuando hace clic en "Sí")
+    // 3. Aceptación de la propuesta (al presionar "Sí")
     function celebrate() {
       document.getElementById('proposal-box').style.display = 'none';
       document.getElementById('celebration').style.display = 'block';
@@ -407,7 +435,8 @@
         setTimeout(createPetal, i * 50);
       }
     }
-  // Abrir modal de imagen al hacer clic en cualquier foto de la galería
+
+    // 4. Modal de imágenes completas (zoom al hacer clic)
     const modal = document.getElementById('imageModal');
     const modalImg = document.getElementById('modalImg');
 
@@ -424,7 +453,7 @@
       modalImg.src = '';
     }
 
-    // Cerrar con la tecla Escape si está en computadora
+    // Cerrar con Escape en computadora
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeModal();
     });
