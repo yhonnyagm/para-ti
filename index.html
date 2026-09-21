@@ -139,6 +139,11 @@
       display: block;
       max-height: 320px;
       object-fit: cover;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    .photo-card img:hover {
+      transform: scale(1.02);
     }
     .photo-caption {
       font-size: 0.85rem;
@@ -147,123 +152,7 @@
       font-style: italic;
     }
 
-    /* Carta / Propuesta */
-    .letter {
-      background: rgba(0, 0, 0, 0.2);
-      border-left: 3px solid #ffd60a;
-      padding: 1.2rem;
-      border-radius: 0 12px 12px 0;
-      font-size: 0.95rem;
-      line-height: 1.6;
-      text-align: left;
-      margin-bottom: 2rem;
-      color: #f1f5f9;
-    }
-    .question {
-      font-size: 1.4rem;
-      font-weight: 600;
-      color: #ffd60a;
-      margin-bottom: 1.5rem;
-    }
-
-    /* Botones interactivos */
-  /* Contenedor de botones: centrados y adaptables al ancho del móvil */
-    .actions {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-      width: 100%;
-      margin: 1.2rem 0 0.5rem;
-      box-sizing: border-box;
-    }
-
-    /* Botones con proporciones limpias para móvil */
-    .btn {
-      border: none;
-      border-radius: 9999px;
-      font-weight: 600;
-      font-family: inherit;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      user-select: none;
-      transition: background 0.2s ease, transform 0.1s ease;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    /* Botón Sí: ocupa el espacio principal con tamaño de letra ajustado */
-    .btn-yes {
-      flex: 1;
-      max-width: 220px;
-      padding: 13px 16px;
-      font-size: 0.95rem;
-      background: #ffc300;
-      color: #0b1320;
-      box-shadow: 0 4px 15px rgba(255, 195, 0, 0.35);
-      white-space: nowrap;
-    }
-    .btn-yes:active {
-      transform: scale(0.97);
-    }
-
-    /* Botón No: ancho compacto y contenido */
-    .btn-no {
-      flex-shrink: 0;
-      width: 75px;
-      padding: 13px 0;
-      font-size: 0.95rem;
-      background: rgba(255, 255, 255, 0.12);
-      color: #ffffff;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-    }
-    .btn-no:active {
-      transform: scale(0.97);
-    }
-    .error-toast {
-      margin-top: 1.2rem;
-      padding: 0.75rem 1.2rem;
-      border-radius: 12px;
-      background: rgba(239, 68, 68, 0.15);
-      border: 1px solid rgba(239, 68, 68, 0.35);
-      color: #fca5a5;
-      font-size: 0.9rem;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      line-height: 1.4;
-      animation: shake 0.4s ease;
-    }
-
-    /* Animación de vibración suave tipo error del sistema */
-    @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      20%, 60% { transform: translateX(-6px); }
-      40%, 80% { transform: translateX(6px); }
-    }
-
-    /* Mensaje de aceptación */
-    #celebration {
-      display: none;
-      animation: fadeIn 1s forwards;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-  /* Cursor de lupa para indicar que se puede agrandar */
-    .photo-card img {
-      cursor: pointer;
-      transition: transform 0.2s ease;
-    }
-    .photo-card img:hover {
-      transform: scale(1.02);
-    }
-
-    /* Fondo oscuro de pantalla completa */
+    /* Modal de imagen completa */
     .image-modal {
       display: none;
       position: fixed;
@@ -279,19 +168,15 @@
       padding: 1.5rem;
       cursor: pointer;
     }
-
-    /* Imagen expandida */
     .image-modal img {
       max-width: 95vw;
       max-height: 90vh;
-      object-fit: contain; /* Muestra toda la captura sin recortar nada */
+      object-fit: contain;
       border-radius: 12px;
       box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
       cursor: default;
       animation: zoomIn 0.25s ease;
     }
-
-    /* Botón X de cerrar */
     .modal-close {
       position: absolute;
       top: 20px;
@@ -303,63 +188,57 @@
       line-height: 1;
       user-select: none;
     }
-
     @keyframes zoomIn {
       from { opacity: 0; transform: scale(0.9); }
       to { opacity: 1; transform: scale(1); }
     }
 
-  /* Contenedor del sobre */
+    /* Sobre interactivo */
     .envelope-wrapper {
-      margin: 2.5rem auto 1.5rem;
+      margin: 2rem auto 1rem;
       width: 100%;
-      max-width: 420px;
+      max-width: 440px;
       display: flex;
       justify-content: center;
       cursor: pointer;
       user-select: none;
+      -webkit-tap-highlight-color: transparent;
     }
-
     .envelope {
       position: relative;
       width: 100%;
-      min-height: 230px;
+      min-height: 220px;
       background: #1e293b;
-      border-radius: 16px;
+      border-radius: 18px;
       border: 2px solid rgba(255, 214, 10, 0.4);
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.4s ease;
+      overflow: hidden;
     }
-
-    /* Solapa y textura de sobre */
     .envelope-flap {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
-      height: 90px;
-      background: linear-gradient(180deg, rgba(255, 214, 10, 0.15), transparent);
-      border-bottom: 2px solid rgba(255, 214, 10, 0.3);
+      height: 85px;
+      background: linear-gradient(180deg, rgba(255, 214, 10, 0.18), transparent);
+      border-bottom: 2px solid rgba(255, 214, 10, 0.35);
       clip-path: polygon(0 0, 100% 0, 50% 100%);
-      transition: transform 0.5s ease;
-      transform-origin: top;
       z-index: 3;
     }
-
-    /* Sello central */
     .envelope-seal {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 6px;
       z-index: 4;
-      transition: opacity 0.3s ease, transform 0.3s ease;
+      pointer-events: none;
     }
     .seal-icon {
-      font-size: 2.6rem;
+      font-size: 2.8rem;
       filter: drop-shadow(0 0 10px rgba(255, 214, 10, 0.5));
       animation: pulse 2s infinite alternate ease-in-out;
     }
@@ -370,22 +249,22 @@
       letter-spacing: 0.5px;
       text-transform: uppercase;
     }
-
     @keyframes pulse {
       from { transform: scale(1); }
       to { transform: scale(1.12); }
     }
 
-    /* La Carta adentro (oculta al inicio) */
+    /* Carta revelada */
     .letter-card {
       display: none;
       width: 100%;
-      background: rgba(15, 23, 42, 0.95);
-      border-radius: 14px;
+      background: rgba(15, 23, 42, 0.96);
+      border-radius: 16px;
       padding: 1.8rem 1.2rem;
       box-sizing: border-box;
       text-align: center;
-      animation: unfold 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      border: 1.5px solid rgba(255, 214, 10, 0.4);
+      animation: unfold 0.5s ease forwards;
     }
     .letter-text {
       font-size: 0.95rem;
@@ -394,13 +273,13 @@
       margin-bottom: 1.5rem;
       font-style: italic;
     }
-
-    /* Estado cuando ya está abierto */
     .envelope.open {
-      cursor: default;
-      background: transparent;
-      border-color: rgba(255, 214, 10, 0.6);
       min-height: auto;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      overflow: visible;
+      cursor: default;
     }
     .envelope.open .envelope-flap,
     .envelope.open .envelope-seal {
@@ -409,16 +288,97 @@
     .envelope.open .letter-card {
       display: block;
     }
-
     @keyframes unfold {
-      from {
-        opacity: 0;
-        transform: translateY(20px) scale(0.96);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Propuesta y botones móviles */
+    .question {
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: #ffd60a;
+      margin-bottom: 1rem;
+    }
+    .actions {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      margin: 1rem 0 0.5rem;
+      box-sizing: border-box;
+    }
+    .btn {
+      border: none;
+      border-radius: 9999px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      user-select: none;
+      transition: background 0.2s ease, transform 0.1s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-yes {
+      flex: 1;
+      max-width: 220px;
+      padding: 13px 14px;
+      font-size: 0.95rem;
+      background: #ffc300;
+      color: #0b1320;
+      box-shadow: 0 4px 15px rgba(255, 195, 0, 0.35);
+      white-space: nowrap;
+    }
+    .btn-yes:active {
+      transform: scale(0.97);
+    }
+    .btn-no {
+      flex-shrink: 0;
+      width: 75px;
+      padding: 13px 0;
+      font-size: 0.95rem;
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    .btn-no:active {
+      transform: scale(0.97);
+    }
+
+    /* Error interactivo */
+    .error-toast {
+      margin-top: 1rem;
+      padding: 0.75rem 1rem;
+      border-radius: 12px;
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      color: #fca5a5;
+      font-size: 0.88rem;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.4;
+      animation: shake 0.4s ease;
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+
+    /* Mensaje de aceptación */
+    #celebration {
+      display: none;
+      animation: fadeIn 1s forwards;
+      margin-top: 1.5rem;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
@@ -450,7 +410,6 @@
     <!-- Galería de momentos -->
     <div class="gallery-title">Algunos de nuestros momentos 💛</div>
     <div class="gallery">
-      <!-- Reemplaza foto1.jpg con el nombre exacto de tus capturas -->
       <div class="photo-card">
         <img src="fotojuntos.jpeg" alt="Foto juntos">
         <p class="photo-caption">Muy pronto nos tomaremos una foto mucho más linda que esta.</p>
@@ -461,7 +420,7 @@
       </div>
       <div class="photo-card">
         <img src="foto2.jpeg" alt="Momento 2">
-        <p class="photo-caption">No te cambiaría por nada en el mundo!</p>
+        <p class="photo-caption">¡No te cambiaría por nada en el mundo!</p>
       </div>
       <div class="photo-card">
         <img src="foto3.jpeg" alt="Momento 3">
@@ -469,28 +428,24 @@
       </div>
       <div class="photo-card">
         <img src="foto4.jpeg" alt="Momento 4">
-        <p class="photo-caption">El primer dibujito que me hiciste <3</p>
+        <p class="photo-caption">El primer dibujito que me hiciste &lt;3</p>
       </div>
-       <div class="photo-card">
+      <div class="photo-card">
         <img src="foto5.jpeg" alt="Momento 5">
-        <p class="photo-caption">Que tu nombre siempre permanezca junto al mío!</p>
+        <p class="photo-caption">¡Que tu nombre siempre permanezca junto al mío!</p>
       </div>
     </div>
 
-    <!-- Carta y Propuesta -->
-<!-- Contenedor del Sobre Interactivo -->
+    <!-- Sobre Interactivo -->
     <div class="envelope-wrapper" id="envelopeWrapper" onclick="openEnvelope()">
       <div class="envelope" id="envelope">
-        <div class="envelope-front"></div>
         <div class="envelope-flap"></div>
         
-        <!-- Sello con botón de pulsar para abrir -->
         <div class="envelope-seal" id="envelopeSeal">
           <span class="seal-icon">💌</span>
           <span class="seal-hint">Toca para abrir</span>
         </div>
 
-        <!-- La Carta que sale del sobre -->
         <div class="letter-card" id="letterCard">
           <p class="letter-text">
             Cada llamada, cada mensaje y cada captura guardada me han demostrado que la distancia es solo geográfica. Mi presente y mis ganas de construir algo hermoso están contigo todos los días... 🌻
@@ -513,12 +468,14 @@
       <p style="color: #e0e1dd; line-height: 1.6;">Acabas de hacerme el hombre más feliz del mundo. Los kilómetros entre nosotros son temporales, pero lo que siento por ti es para siempre. ¡Feliz día de las flores amarillas, mi niña hermosa! 🌻</p>
     </div>
   </div>
-<!-- Visor de imagen en pantalla completa -->
+
+  <!-- Visor de imagen en pantalla completa -->
   <div id="imageModal" class="image-modal" onclick="closeModal(event)">
     <span class="modal-close">&times;</span>
     <img id="modalImg" src="" alt="Captura ampliada" onclick="event.stopPropagation()">
   </div>
-<script>
+
+  <script>
     // 1. Pétalos dorados cayendo
     function createPetal() {
       const petal = document.createElement('div');
@@ -544,7 +501,7 @@
       }
     }
 
-    // 3. Botón "No" con mensajes dinámicos
+    // 3. Botón "No" con mensajes dinámicos (sin agrandar el botón Sí)
     const errorMessages = [
       "⚠️ Error 404: Respuesta no permitida por el sistema.",
       "⚠️ Acción inválida: Esta opción no está disponible para ti.",
@@ -554,12 +511,10 @@
     ];
 
     let errorIndex = 0;
-    let yesScale = 1;
 
     function handleNoClick(e) {
-      if (e) e.stopPropagation(); // Evita interferir con el sobre
+      if (e) e.stopPropagation();
       const errorDiv = document.getElementById('errorMessage');
-      const btnYes = document.getElementById('btnYes');
 
       errorDiv.innerHTML = errorMessages[errorIndex];
       errorDiv.style.display = 'flex';
@@ -568,9 +523,6 @@
       errorDiv.style.animation = 'shake 0.4s ease';
 
       errorIndex = (errorIndex + 1) % errorMessages.length;
-
-      yesScale += 0.08;
-      btnYes.style.transform = `scale(${yesScale})`;
     }
 
     // 4. Aceptación (al presionar "Sí")
@@ -602,29 +554,6 @@
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeModal();
     });
-  // Mensajes de error al presionar "No" (sin alterar el tamaño del botón Sí)
-    const errorMessages = [
-      "⚠️ Error 404: Respuesta no permitida por el sistema.",
-      "⚠️ Acción inválida: Esta opción no está disponible para ti.",
-      "⚠️ Advertencia: El botón correcto es el amarillo.",
-      "⚠️ Error de conexión: Intenta marcar '¡Sí, claro que sí!'.",
-      "⚠️ ¿Segura? Mira qué lindo brilla el botón amarillo..."
-    ];
-
-    let errorIndex = 0;
-
-    function handleNoClick(e) {
-      if (e) e.stopPropagation();
-      const errorDiv = document.getElementById('errorMessage');
-
-      errorDiv.innerHTML = errorMessages[errorIndex];
-      errorDiv.style.display = 'flex';
-      errorDiv.style.animation = 'none';
-      errorDiv.offsetHeight; // Reiniciar animación de vibración
-      errorDiv.style.animation = 'shake 0.4s ease';
-
-      errorIndex = (errorIndex + 1) % errorMessages.length;
-    }
   </script>
 </body>
 </html>
