@@ -294,6 +294,118 @@
       from { opacity: 0; transform: scale(0.9); }
       to { opacity: 1; transform: scale(1); }
     }
+
+  /* Contenedor del sobre */
+    .envelope-wrapper {
+      margin: 2.5rem auto 1.5rem;
+      width: 100%;
+      max-width: 420px;
+      display: flex;
+      justify-content: center;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .envelope {
+      position: relative;
+      width: 100%;
+      min-height: 230px;
+      background: #1e293b;
+      border-radius: 16px;
+      border: 2px solid rgba(255, 214, 10, 0.4);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Solapa y textura de sobre */
+    .envelope-flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 90px;
+      background: linear-gradient(180deg, rgba(255, 214, 10, 0.15), transparent);
+      border-bottom: 2px solid rgba(255, 214, 10, 0.3);
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      transition: transform 0.5s ease;
+      transform-origin: top;
+      z-index: 3;
+    }
+
+    /* Sello central */
+    .envelope-seal {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      z-index: 4;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .seal-icon {
+      font-size: 2.6rem;
+      filter: drop-shadow(0 0 10px rgba(255, 214, 10, 0.5));
+      animation: pulse 2s infinite alternate ease-in-out;
+    }
+    .seal-hint {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #ffd60a;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    @keyframes pulse {
+      from { transform: scale(1); }
+      to { transform: scale(1.12); }
+    }
+
+    /* La Carta adentro (oculta al inicio) */
+    .letter-card {
+      display: none;
+      width: 100%;
+      background: rgba(15, 23, 42, 0.95);
+      border-radius: 14px;
+      padding: 1.8rem 1.2rem;
+      box-sizing: border-box;
+      text-align: center;
+      animation: unfold 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .letter-text {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #f1f5f9;
+      margin-bottom: 1.5rem;
+      font-style: italic;
+    }
+
+    /* Estado cuando ya está abierto */
+    .envelope.open {
+      cursor: default;
+      background: transparent;
+      border-color: rgba(255, 214, 10, 0.6);
+      min-height: auto;
+    }
+    .envelope.open .envelope-flap,
+    .envelope.open .envelope-seal {
+      display: none;
+    }
+    .envelope.open .letter-card {
+      display: block;
+    }
+
+    @keyframes unfold {
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.96);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
   </style>
 </head>
 <body>
@@ -352,19 +464,36 @@
     </div>
 
     <!-- Carta y Propuesta -->
-    <div class="letter">
-      Cada mensaje, cada audio y cada captura guardada me han demostrado que la distancia es solo geográfica. Mi presente y mis ganas de construir algo hermoso están contigo todos los días.
-    </div>
+<!-- Contenedor del Sobre Interactivo -->
+    <div class="envelope-wrapper" id="envelopeWrapper" onclick="openEnvelope()">
+      <div class="envelope" id="envelope">
+        <div class="envelope-front"></div>
+        <div class="envelope-flap"></div>
+        
+        <!-- Sello con botón de pulsar para abrir -->
+        <div class="envelope-seal" id="envelopeSeal">
+          <span class="seal-icon">💌</span>
+          <span class="seal-hint">Toca para abrir</span>
+        </div>
 
-    <div id="proposal-box">
-      <div class="question">¿Quieres ser mi novia? ✨</div>
-      <div class="actions">
-        <button class="btn btn-yes" onclick="celebrate()">¡Sí, claro que sí! 💛</button>
-        <button class="btn btn-no" id="btnNo" onclick="handleNoClick()">No</button>
+        <!-- La Carta que sale del sobre -->
+        <div class="letter-card" id="letterCard">
+          <p class="letter-text">
+            Cada llamada, cada mensaje y cada captura guardada me han demostrado que la distancia es solo geográfica. Mi presente y mis ganas de construir algo hermoso están contigo todos los días... 🌻
+          </p>
+          
+          <div id="proposal-box">
+            <div class="question">¿Quieres ser mi novia? ✨</div>
+            <div class="actions">
+              <button class="btn btn-yes" id="btnYes" onclick="celebrate(event)">¡Sí, claro que sí! 💛</button>
+              <button class="btn btn-no" id="btnNo" onclick="handleNoClick(event)">No</button>
+            </div>
+            <div id="errorMessage" class="error-toast"></div>
+          </div>
+        </div>
       </div>
-      <div id="errorMessage" class="error-toast"></div>
     </div>
-
+    
     <div id="celebration">
       <h2 style="color: #ffd60a; font-size: 2rem; margin-bottom: 1rem;">¡Dijo que sí! 🥰</h2>
       <p style="color: #e0e1dd; line-height: 1.6;">Acabas de hacerme el hombre más feliz del mundo. Los kilómetros entre nosotros son temporales, pero lo que siento por ti es para siempre. ¡Feliz día de las flores amarillas, mi niña hermosa! 🌻</p>
@@ -376,7 +505,7 @@
     <img id="modalImg" src="" alt="Captura ampliada" onclick="event.stopPropagation()">
   </div>
 <script>
-    // 1. Generar pétalos dorados cayendo
+    // 1. Pétalos dorados cayendo
     function createPetal() {
       const petal = document.createElement('div');
       petal.classList.add('petal');
@@ -392,7 +521,16 @@
     }
     setInterval(createPetal, 300);
 
-    // 2. Mensajes de error al presionar el botón "No"
+    // 2. Abrir el sobre
+    let isEnvelopeOpen = false;
+    function openEnvelope() {
+      if (!isEnvelopeOpen) {
+        isEnvelopeOpen = true;
+        document.getElementById('envelope').classList.add('open');
+      }
+    }
+
+    // 3. Botón "No" con mensajes dinámicos
     const errorMessages = [
       "⚠️ Error 404: Respuesta no permitida por el sistema.",
       "⚠️ Acción inválida: Esta opción no está disponible para ti.",
@@ -404,35 +542,34 @@
     let errorIndex = 0;
     let yesScale = 1;
 
-    function handleNoClick() {
+    function handleNoClick(e) {
+      if (e) e.stopPropagation(); // Evita interferir con el sobre
       const errorDiv = document.getElementById('errorMessage');
       const btnYes = document.getElementById('btnYes');
 
-      // Muestra el mensaje de error con animación
       errorDiv.innerHTML = errorMessages[errorIndex];
       errorDiv.style.display = 'flex';
       errorDiv.style.animation = 'none';
-      errorDiv.offsetHeight; // Forzar reinicio de animación
+      errorDiv.offsetHeight;
       errorDiv.style.animation = 'shake 0.4s ease';
 
-      // Avanzar al siguiente mensaje
       errorIndex = (errorIndex + 1) % errorMessages.length;
 
-      // Hace que el botón de Sí crezca un poco cada vez
       yesScale += 0.08;
       btnYes.style.transform = `scale(${yesScale})`;
     }
 
-    // 3. Aceptación de la propuesta (al presionar "Sí")
-    function celebrate() {
-      document.getElementById('proposal-box').style.display = 'none';
+    // 4. Aceptación (al presionar "Sí")
+    function celebrate(e) {
+      if (e) e.stopPropagation();
+      document.getElementById('envelopeWrapper').style.display = 'none';
       document.getElementById('celebration').style.display = 'block';
-      for (let i = 0; i < 40; i++) {
-        setTimeout(createPetal, i * 50);
+      for (let i = 0; i < 45; i++) {
+        setTimeout(createPetal, i * 40);
       }
     }
 
-    // 4. Modal de imágenes completas (zoom al hacer clic)
+    // 5. Modal para fotos en pantalla completa
     const modal = document.getElementById('imageModal');
     const modalImg = document.getElementById('modalImg');
 
@@ -443,13 +580,11 @@
       });
     });
 
-    // Cerrar modal al tocar la X o fuera de la foto
-    function closeModal(e) {
+    function closeModal() {
       modal.style.display = 'none';
       modalImg.src = '';
     }
 
-    // Cerrar con Escape en computadora
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeModal();
     });
