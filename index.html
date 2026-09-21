@@ -167,46 +167,60 @@
     }
 
     /* Botones interactivos */
+  /* Contenedor de botones: centrados y adaptables al ancho del móvil */
     .actions {
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 16px;
-      margin-top: 1.5rem;
-      min-height: 60px;
-      position: relative;
+      gap: 10px;
+      width: 100%;
+      margin: 1.2rem 0 0.5rem;
+      box-sizing: border-box;
     }
+
+    /* Botones con proporciones limpias para móvil */
     .btn {
-      padding: 14px 28px;
       border: none;
-      border-radius: 9999px; /* Forma de píldora idéntica a la imagen */
-      font-size: 1.05rem;
+      border-radius: 9999px;
       font-weight: 600;
       font-family: inherit;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      transition: transform 0.15s ease, background 0.2s ease;
-      white-space: nowrap;
+      text-align: center;
       user-select: none;
+      transition: background 0.2s ease, transform 0.1s ease;
+      -webkit-tap-highlight-color: transparent;
     }
+
+    /* Botón Sí: ocupa el espacio principal con tamaño de letra ajustado */
     .btn-yes {
+      flex: 1;
+      max-width: 220px;
+      padding: 13px 16px;
+      font-size: 0.95rem;
       background: #ffc300;
       color: #0b1320;
-      box-shadow: 0 4px 20px rgba(255, 195, 0, 0.35);
+      box-shadow: 0 4px 15px rgba(255, 195, 0, 0.35);
+      white-space: nowrap;
     }
-    .btn-yes:hover {
-      background: #ffd000;
-      transform: scale(1.03);
+    .btn-yes:active {
+      transform: scale(0.97);
     }
+
+    /* Botón No: ancho compacto y contenido */
     .btn-no {
+      flex-shrink: 0;
+      width: 75px;
+      padding: 13px 0;
+      font-size: 0.95rem;
       background: rgba(255, 255, 255, 0.12);
       color: #ffffff;
       border: 1px solid rgba(255, 255, 255, 0.15);
-      position: relative; /* Clave: empieza al lado, no montado */
-      min-width: 90px;
+    }
+    .btn-no:active {
+      transform: scale(0.97);
     }
     .error-toast {
       margin-top: 1.2rem;
@@ -588,6 +602,29 @@
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeModal();
     });
+  // Mensajes de error al presionar "No" (sin alterar el tamaño del botón Sí)
+    const errorMessages = [
+      "⚠️ Error 404: Respuesta no permitida por el sistema.",
+      "⚠️ Acción inválida: Esta opción no está disponible para ti.",
+      "⚠️ Advertencia: El botón correcto es el amarillo.",
+      "⚠️ Error de conexión: Intenta marcar '¡Sí, claro que sí!'.",
+      "⚠️ ¿Segura? Mira qué lindo brilla el botón amarillo..."
+    ];
+
+    let errorIndex = 0;
+
+    function handleNoClick(e) {
+      if (e) e.stopPropagation();
+      const errorDiv = document.getElementById('errorMessage');
+
+      errorDiv.innerHTML = errorMessages[errorIndex];
+      errorDiv.style.display = 'flex';
+      errorDiv.style.animation = 'none';
+      errorDiv.offsetHeight; // Reiniciar animación de vibración
+      errorDiv.style.animation = 'shake 0.4s ease';
+
+      errorIndex = (errorIndex + 1) % errorMessages.length;
+    }
   </script>
 </body>
 </html>
