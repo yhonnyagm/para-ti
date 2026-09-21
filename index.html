@@ -218,6 +218,60 @@
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
+  /* Cursor de lupa para indicar que se puede agrandar */
+    .photo-card img {
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    .photo-card img:hover {
+      transform: scale(1.02);
+    }
+
+    /* Fondo oscuro de pantalla completa */
+    .image-modal {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(5, 10, 20, 0.92);
+      backdrop-filter: blur(8px);
+      justify-content: center;
+      align-items: center;
+      padding: 1.5rem;
+      cursor: pointer;
+    }
+
+    /* Imagen expandida */
+    .image-modal img {
+      max-width: 95vw;
+      max-height: 90vh;
+      object-fit: contain; /* Muestra toda la captura sin recortar nada */
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+      cursor: default;
+      animation: zoomIn 0.25s ease;
+    }
+
+    /* Botón X de cerrar */
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 25px;
+      color: #ffd60a;
+      font-size: 2.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      line-height: 1;
+      user-select: none;
+    }
+
+    @keyframes zoomIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
   </style>
 </head>
 <body>
@@ -277,7 +331,11 @@
       <p style="color: #e0e1dd; line-height: 1.6;">Acabas de hacerme la persona más feliz del mundo. Los kilómetros entre nosotros son temporales, pero lo que siento por ti es para siempre. ¡Feliz día de las flores amarillas, mi niña hermosa! 🌻</p>
     </div>
   </div>
-
+<!-- Visor de imagen en pantalla completa -->
+  <div id="imageModal" class="image-modal" onclick="closeModal(event)">
+    <span class="modal-close">&times;</span>
+    <img id="modalImg" src="" alt="Captura ampliada" onclick="event.stopPropagation()">
+  </div>
 <script>
     // 1. Generar pétalos dorados cayendo
     function createPetal() {
@@ -329,6 +387,27 @@
         setTimeout(createPetal, i * 50);
       }
     }
+  // Abrir modal de imagen al hacer clic en cualquier foto de la galería
+    const modal = document.getElementById('imageModal');
+    const modalImg = document.getElementById('modalImg');
+
+    document.querySelectorAll('.photo-card img').forEach(img => {
+      img.addEventListener('click', () => {
+        modalImg.src = img.src;
+        modal.style.display = 'flex';
+      });
+    });
+
+    // Cerrar modal al tocar la X o fuera de la foto
+    function closeModal(e) {
+      modal.style.display = 'none';
+      modalImg.src = '';
+    }
+
+    // Cerrar con la tecla Escape si está en computadora
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
   </script>
 </body>
 </html>
