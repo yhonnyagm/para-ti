@@ -170,32 +170,43 @@
     .actions {
       display: flex;
       justify-content: center;
-      gap: 15px;
-      position: relative;
+      align-items: center;
+      gap: 16px;
+      margin-top: 1.5rem;
       min-height: 60px;
+      position: relative;
     }
     .btn {
-      padding: 12px 28px;
+      padding: 14px 28px;
       border: none;
-      border-radius: 50px;
+      border-radius: 9999px; /* Forma de píldora idéntica a la imagen */
       font-size: 1.05rem;
       font-weight: 600;
+      font-family: inherit;
       cursor: pointer;
-      transition: transform 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform 0.15s ease, background 0.2s ease;
+      white-space: nowrap;
+      user-select: none;
     }
     .btn-yes {
-      background: #ffd60a;
-      color: #000814;
-      box-shadow: 0 4px 15px rgba(255, 214, 10, 0.4);
+      background: #ffc300;
+      color: #0b1320;
+      box-shadow: 0 4px 20px rgba(255, 195, 0, 0.35);
     }
     .btn-yes:hover {
-      transform: scale(1.08);
+      background: #ffd000;
+      transform: scale(1.03);
     }
     .btn-no {
-      background: rgba(255, 255, 255, 0.1);
-      color: #fff;
-      border: 1px solid rgba(255,255,255,0.2);
-      position: absolute;
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      position: relative; /* Clave: empieza al lado, no montado */
+      min-width: 90px;
     }
 
     /* Mensaje de aceptación */
@@ -257,7 +268,7 @@
       <div class="question">¿Quieres ser formalmente mi novia? ✨</div>
       <div class="actions">
         <button class="btn btn-yes" onclick="celebrate()">¡Sí, claro que sí! 💛</button>
-        <button class="btn btn-no" id="btnNo" onmouseover="dodge()" onclick="dodge()">No</button>
+        <button class="btn btn-no" id="btnNo">No</button>
       </div>
     </div>
 
@@ -267,8 +278,8 @@
     </div>
   </div>
 
-  <script>
-    // Generar pétalos dorados cayendo
+<script>
+    // 1. Generar pétalos dorados cayendo
     function createPetal() {
       const petal = document.createElement('div');
       petal.classList.add('petal');
@@ -284,25 +295,37 @@
     }
     setInterval(createPetal, 300);
 
-    // Botón "No" escurridizo
+    // 2. Botón "No" que escapa al intentar tocarlo
     const btnNo = document.getElementById('btnNo');
-    let moved = false;
-    function dodge() {
-      if(!moved) {
-        btnNo.style.position = 'fixed';
-        moved = true;
-      }
-      const x = Math.random() * (window.innerWidth - 100);
-      const y = Math.random() * (window.innerHeight - 50);
-      btnNo.style.left = `${x}px`;
-      btnNo.style.top = `${y}px`;
+
+    function dodge(e) {
+      if (e) e.preventDefault();
+
+      // Al primer intento de clic o toque, se desacopla para moverse libremente
+      btnNo.style.position = 'fixed';
+      btnNo.style.zIndex = '999';
+
+      const padding = 20;
+      const maxX = window.innerWidth - btnNo.offsetWidth - padding;
+      const maxY = window.innerHeight - btnNo.offsetHeight - padding;
+
+      const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
+      const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
+
+      btnNo.style.left = `${randomX}px`;
+      btnNo.style.top = `${randomY}px`;
     }
 
-    // Aceptación de la propuesta
+    // Funciona tanto en computadora (al pasar el mouse) como en teléfono (al intentar tocarlo)
+    btnNo.addEventListener('mouseenter', dodge);
+    btnNo.addEventListener('touchstart', dodge, { passive: false });
+    btnNo.addEventListener('click', dodge);
+
+    // 3. Aceptación de la propuesta (cuando hace clic en "Sí")
     function celebrate() {
       document.getElementById('proposal-box').style.display = 'none';
       document.getElementById('celebration').style.display = 'block';
-      for(let i = 0; i < 40; i++) {
+      for (let i = 0; i < 40; i++) {
         setTimeout(createPetal, i * 50);
       }
     }
